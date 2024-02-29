@@ -8,7 +8,7 @@ class Tracker():
         self.__raw_instr.append(instr)
         return len(self.__raw_instr)
     def add_pattern(self, pattern):
-        self.__raw_instr.append(pattern)
+        self.__raw_pattern.append(pattern)
         return len(self.__raw_pattern)
     def render(self):
         freq = 1
@@ -34,6 +34,8 @@ class Tracker():
                     dur *= line[2]
                 if line_len > 3:
                     vel *= line[3]
-                #make args list input to fn
-                curr_pattern.extend(instr(freq, dur, vel))
-            rendered.append(curr_pattern.clone())
+                #TODO: make args to fn optional
+                np.append(curr_pattern, instr(freq, dur, vel))
+            pre_rendered.append(curr_pattern.clone())
+            max_len = max([len(i) for i in pre_rendered])
+            rendered = np.array([np.append(i, np.zeros(max_len - len(i))) for i in pre_rendered])
