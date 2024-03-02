@@ -1,3 +1,5 @@
+import numpy as np
+from scipy.io.wavfile import write as wav_render
 class Tracker():
     def __init__(self, hz = 44100, v = 1):
         self.sample_rate = hz
@@ -11,9 +13,10 @@ class Tracker():
         self.__raw_pattern.append(pattern)
         return len(self.__raw_pattern)
     def render(self):
-        freq = 1
+        freq = 440
         dur = 1
         vel = 1
+        pre_rendered = []
         rendered = []
         for pattern in self.__raw_pattern:
             curr_pattern = []
@@ -35,7 +38,8 @@ class Tracker():
                 if line_len > 3:
                     vel *= line[3]
                 #TODO: make args to fn optional
-                np.append(curr_pattern, instr(freq, dur, vel))
-            pre_rendered.append(curr_pattern.clone())
+                np.append(curr_pattern, instr(self.sample_rate//freq, dur*self.sample_rate, vel))
+            pre_rendered.append(curr_pattern.copy())
             max_len = max([len(i) for i in pre_rendered])
             rendered = np.array([np.append(i, np.zeros(max_len - len(i))) for i in pre_rendered])
+            wav_render("out.wav", self.sample_rate, rendered)
