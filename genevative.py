@@ -19,7 +19,7 @@ class Tracker():
         pre_rendered = []
         rendered = []
         for pattern in self.__raw_pattern:
-            curr_pattern = []
+            curr_pattern = np.array([], dtype="float64")
             for n, line in enumerate(pattern):
                 if n == 0:
                     freq = line[0]
@@ -38,8 +38,9 @@ class Tracker():
                 if line_len > 3:
                     vel *= line[3]
                 #TODO: make args to fn optional
-                np.append(curr_pattern, instr(self.sample_rate//freq, dur*self.sample_rate, vel))
+                curr_pattern = np.append(curr_pattern, instr(self.sample_rate/freq, dur*self.sample_rate, vel))
             pre_rendered.append(curr_pattern.copy())
             max_len = max([len(i) for i in pre_rendered])
-            rendered = np.array([np.append(i, np.zeros(max_len - len(i))) for i in pre_rendered])
+            rendered = np.sum([np.append(i, np.zeros(max_len - len(i))) for i in pre_rendered], axis=0)
+            print(rendered)
             wav_render("out.wav", self.sample_rate, rendered)
