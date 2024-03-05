@@ -38,7 +38,7 @@ class Tracker():
                 if line_len > 3:
                     vel *= line[3]
                 #TODO: make args to fn optional
-                curr_pattern = np.append(curr_pattern, instr(self.sample_rate/freq, dur*self.sample_rate, vel))
+                curr_pattern = np.append(curr_pattern, instr(self.sample_rate/freq, dur*self.sample_rate, vel, self.sample_rate))
             pre_rendered.append(curr_pattern.copy())
             max_len = max([len(i) for i in pre_rendered])
             rendered = np.sum([np.append(i, np.zeros(max_len - len(i))) for i in pre_rendered], axis=0)
