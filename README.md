@@ -13,6 +13,8 @@
 - [] Vel of note = param
 - [] Some args to the fn
 - [] Arpeggio
+- [] Note probability
+- [] Random pitch
 ### Instruments and Effect 
 - [] Create class for this lol
 - [] Basic oscillators
