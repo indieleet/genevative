@@ -24,6 +24,7 @@ class Tracker():
             total_vel = 1
             total_len = 1
             curr_pattern = np.array([], dtype="float64")
+            freq_and_vel = []
             for n, line in enumerate(pattern):
                 if n == 0:
                     freq = line[0]
@@ -44,35 +45,15 @@ class Tracker():
                 if line_len > 3:
                     vel *= line[3]
                     total_vel *= line[3]
+                    appended_vel = vel
+                freq_and_vel.append((freq, vel))
                 if line_len > 4:
-                    for note_fx in range(line_len-4, line_len + 1):
-                        if note_fx[0] == 0:
-                            pass
-                        if note_fx[0] == 1:
-                            pass
-                        if note_fx[0] == 2:
-                            pass
-                        if note_fx[0] == 3:
-                            pass
-                        if note_fx[0] == 4:
-                            pass
-                        if note_fx[0] == 5:
-                            pass
-                        if note_fx[0] == 6:
-                            pass
-                        if note_fx[0] == 7:
-                            pass
-                        if note_fx[0] == 8:
-                            pass
-                        if note_fx[0] == 9:
-                            pass
-                        if note_fx[0] == 10:
-                            pass
-                        if note_fx[0] == 11:
-                            pass
-                        if note_fx[0] == 12:
-                            pass
-                        if note_fx[0] == 13:
+                    for fxi in range(line_len-4, line_len + 1):
+                        if (line[fxi][0] == 0) or (line[fxi][0] == "ln"):
+                            if len(line[fxi]) > 2:
+                                appended_vel = line[fxi][2]
+                            freq_and_vel.append((freq*line[fxi][1], appended_vel))
+                        if line[fxi][0] == 1:
                             pass
                 #TODO: make args to fn optional
                 curr_pattern = np.append(curr_pattern, instr(self.sample_rate/freq, dur*self.sample_rate, vel, self.sample_rate))
