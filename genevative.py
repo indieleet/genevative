@@ -46,33 +46,33 @@ class Tracker():
                     total_vel *= line[3]
                 if line_len > 4:
                     for note_fx in range(line_len-4, line_len + 1):
-                        if note_fx[1] == 0:
+                        if note_fx[0] == 0:
                             pass
-                        if note_fx[1] == 1:
+                        if note_fx[0] == 1:
                             pass
-                        if note_fx[1] == 2:
+                        if note_fx[0] == 2:
                             pass
-                        if note_fx[1] == 3:
+                        if note_fx[0] == 3:
                             pass
-                        if note_fx[1] == 4:
+                        if note_fx[0] == 4:
                             pass
-                        if note_fx[1] == 5:
+                        if note_fx[0] == 5:
                             pass
-                        if note_fx[1] == 6:
+                        if note_fx[0] == 6:
                             pass
-                        if note_fx[1] == 7:
+                        if note_fx[0] == 7:
                             pass
-                        if note_fx[1] == 8:
+                        if note_fx[0] == 8:
                             pass
-                        if note_fx[1] == 9:
+                        if note_fx[0] == 9:
                             pass
-                        if note_fx[1] == 10:
+                        if note_fx[0] == 10:
                             pass
-                        if note_fx[1] == 11:
+                        if note_fx[0] == 11:
                             pass
-                        if note_fx[1] == 12:
+                        if note_fx[0] == 12:
                             pass
-                        if note_fx[1] == 13:
+                        if note_fx[0] == 13:
                             pass
                 #TODO: make args to fn optional
                 curr_pattern = np.append(curr_pattern, instr(self.sample_rate/freq, dur*self.sample_rate, vel, self.sample_rate))
