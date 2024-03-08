@@ -24,3 +24,4 @@
 ### Overall Improvements
 - [ ] Automatic play
 - [ ] Out file name
+- [ ] Add stereo functionality

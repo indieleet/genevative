@@ -48,7 +48,7 @@ class Tracker():
                     appended_vel = vel
                 freq_and_vel.append((freq, vel))
                 if line_len > 4:
-                    for fxi in range(line_len-4, line_len + 1):
+                    for fxi in range(4, line_len):
                         if (line[fxi][0] == 0) or (line[fxi][0] == "ln"):
                             if len(line[fxi]) > 2:
                                 appended_vel = line[fxi][2]
@@ -56,7 +56,8 @@ class Tracker():
                         if line[fxi][0] == 1:
                             pass
                 #TODO: make args to fn optional
-                curr_pattern = np.append(curr_pattern, instr(self.sample_rate/freq, dur*self.sample_rate, vel, self.sample_rate))
+                added_line = np.sum([instr(self.sample_rate/i[0], dur*self.sample_rate, i[1], self.sample_rate) for i in freq_and_vel], axis=0)
+                curr_pattern = np.append(curr_pattern, added_line)
             pre_rendered.append(curr_pattern.copy())
             total_len = len(curr_pattern)/self.sample_rate
             print(f"n:{pat_num:.2f} f:{total_freq:.2f} d:{total_dur:.2f} v:{total_vel:.2f} l:{total_len:.2f}")
