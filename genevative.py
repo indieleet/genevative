@@ -36,7 +36,7 @@ class Tracker():
                 if line_len > 0:
                     instr = line[0]
                 else:
-                    instr = lambda x,y,w,z:0
+                    instr = lambda x,y,w,z:np.zeros(int(y))
                 if line_len > 1:
                     freq *= line[1]
                     total_freq *= line[1]
