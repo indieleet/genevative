@@ -23,5 +23,5 @@
 - [ ] Additive
 ### Overall Improvements
 - [ ] Automatic play
-- [ ] Out file name
+- [x] Out file name
 - [ ] Add stereo functionality
