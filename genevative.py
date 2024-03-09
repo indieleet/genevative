@@ -1,9 +1,10 @@
 import numpy as np
 from scipy.io.wavfile import write as wav_render
 class Tracker():
-    def __init__(self, hz = 44100, v = 1):
+    def __init__(self, hz = 44100, v = 1, name = "out.wav"):
         self.sample_rate = hz
         self.volume = v
+        self.name = f"{name}.wav"
         self.__raw_instr = []
         self.__raw_pattern = []
     def add_instr(self, instr):
@@ -63,4 +64,4 @@ class Tracker():
             print(f"n:{pat_num:.2f} f:{total_freq:.2f} d:{total_dur:.2f} v:{total_vel:.2f} l:{total_len:.2f}")
             max_len = max([len(i) for i in pre_rendered])
             rendered = np.sum([np.append(i, np.zeros(max_len - len(i))) for i in pre_rendered], axis=0)
-            wav_render("out.wav", self.sample_rate, rendered)
+            wav_render(self.name, self.sample_rate, rendered)
