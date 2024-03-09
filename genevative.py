@@ -1,7 +1,7 @@
 import numpy as np
 from scipy.io.wavfile import write as wav_render
 class Tracker():
-    def __init__(self, hz = 44100, v = 1, name = "out.wav"):
+    def __init__(self, hz = 44100, v = 1, name = "out"):
         self.sample_rate = hz
         self.volume = v
         self.name = f"{name}.wav"

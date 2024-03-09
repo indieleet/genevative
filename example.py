@@ -1,5 +1,6 @@
 import genevative
 import numpy as np
+from os import system
 def i1(freq, dur, vel, hz):
     env = np.resize(np.linspace(0, 1, int(dur)), int(dur))**3
     #bend = np.linspace(0,1,len(arr))**3
@@ -12,9 +13,9 @@ def i3(freq, dur, vel, hz):
     env = np.resize(np.linspace(0, 1, int(dur*1/8)), int(dur))**4
     return np.resize(np.sin(np.sin(np.linspace(-1,1,int(freq))*2*np.pi)*2*np.pi), int(dur))*vel*env
 def i4(freq, dur, vel, hz):
-    env = np.linspace(0,1,hz//8)**4
-    arr = np.resize(np.sin(np.linspace(-1, 1, int(freq))), int(dur))*np.resize(env, int(dur))
-    bend = np.linspace(0,1,len(arr))**3
+    env = np.append(np.linspace(0,1,hz//8)**4, np.zeros(int(hz*3/8)))
+    arr = np.resize(np.append(np.sin(np.linspace(-1, 1, int(hz/8))), np.zeros(int(freq*3/8))), int(dur))*np.resize(env, int(dur))
+    bend = np.resize(np.append(np.linspace(1,0,len(arr)//8)**3, np.zeros(int(len(arr)/3*8))), int(dur))
     iar = np.interp(bend, np.linspace(0,1, len(arr)), arr)
     return iar
 t = genevative.Tracker()
@@ -23,10 +24,10 @@ t.add_pattern(
          [i1, 1, 1, 1],
          [i1, 1, 1/2, 1],
          [],
-         [i1, 3/1, 1, 1, (0,2,1), (0,3,1), (0,1/2,1)],
-         [i1, 1, 1/2, 1],
+         [i1, 3/1, 1, 0.2, (0,2), (0,3), (0,1/2)],
+         [i1, 1, 1/2, 1/0.2],
          [i1, 2/3, 1/2, 1],
-         [i1, 1, 1/2, 1],
+         [i1, 1, 1/2, 0.2, (0,2), (0,1/6), (0,1/2)],
          [i1, 1, 1/4, 1],
          [i1, 2, 1/2, 0.75]])
 t.add_pattern(
@@ -67,3 +68,4 @@ t.add_pattern(
          [i4],
          [i4]])
 t.render()
+system("ffplay -i out.wav")
