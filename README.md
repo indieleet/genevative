@@ -3,9 +3,9 @@
 ## TODO:
 ### Note Effects
 - [x] Layer another note in pattern
-~~- [x] Layer another note in pattern with vel~~
+- [x] ~~Layer another note in pattern with vel~~
 - [ ] Layer another note without previous
-~~- [ ] Layer another note without previous with vel~~
+- [ ] ~~Layer another note without previous with vel~~
 - [ ] Repeat note N times
 - [ ] Freq of note = initial freq
 - [ ] Dur of note = intitial dur

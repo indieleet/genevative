@@ -69,4 +69,4 @@ blops = [[440, 1, 1],
 blops.extend(blops[1:]*5)
 t.add_pattern(blops)
 t.render()
-system("ffplay -i out.wav")
+#system("ffplay -i out.wav")
