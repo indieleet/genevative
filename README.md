@@ -3,21 +3,19 @@
 ## TODO:
 ### Note Effects
 - [x] Layer another note in pattern
-- [x] ~~Layer another note in pattern with vel~~
-- [ ] Layer another note without previous
-- [ ] ~~Layer another note without previous with vel~~
+- [x] Layer another note without previous
+- [x] Freq of note = param
+- [x] Dur of note = param
+- [x] Vel of note = param
 - [ ] Repeat note N times
 - [ ] Freq of note = initial freq
 - [ ] Dur of note = intitial dur
 - [ ] Vel of note = intital vel
-- [ ] Freq of note = param
-- [ ] Dur of note = param
-- [ ] Vel of note = param
 - [ ] Some args to the fn
 - [ ] Arpeggio
 - [ ] Note probability
 - [ ] Random pitch
-### Instruments and Effect 
+### Instruments and Effect
 - [ ] Create class for this lol
 - [ ] Basic oscillators
 - [ ] Envelopes
@@ -28,3 +26,4 @@
 - [x] Out file name
 - [ ] Add stereo functionality
 - [ ] Documentation
+- [ ] Postprocessing
