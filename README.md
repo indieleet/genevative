@@ -7,7 +7,7 @@
 - [x] Freq of note = param
 - [x] Dur of note = param
 - [x] Vel of note = param
-- [ ] Repeat note N times
+- [x] Repeat note N times
 - [ ] Freq of note = initial freq
 - [ ] Dur of note = intitial dur
 - [ ] Vel of note = intital vel
@@ -15,9 +15,11 @@
 - [ ] Arpeggio
 - [ ] Note probability
 - [ ] Random pitch
+- [ ] Random dur
+- [ ] Random velocity
 ### Instruments and Effect
-- [ ] Create class for this lol
-- [ ] Basic oscillators
+- [x] ~~Create class for this lol~~
+- [x] Basic oscillators
 - [ ] Envelopes
 - [ ] FM
 - [ ] Additive
