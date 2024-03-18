@@ -9,6 +9,7 @@ class Tracker():
         self.name = f"{name}.wav"
         self.__raw_instr = []
         self.__raw_pattern = []
+        self.__raw_proc = [[]]
 
     def add_instr(self, instr):
         self.__raw_instr.append(instr)
@@ -16,7 +17,13 @@ class Tracker():
 
     def add_pattern(self, pattern):
         self.__raw_pattern.append(pattern)
+        self.__raw_proc.append([])
         return len(self.__raw_pattern)
+
+    def add_fx(self, pattern_number, fx):
+        if pattern_number == "main":
+            pattern_number = 0
+        self.__raw_proc[pattern_number].append(fx)
 
     def render(self):
         freq = 440
@@ -78,6 +85,8 @@ class Tracker():
                 added_line = np.tile(np.sum([instr(self.sample_rate/i[0], dur*self.sample_rate,
                                                    i[1], self.sample_rate) for i in freq_and_vel], axis=0), repeats)
                 curr_pattern = np.append(curr_pattern, added_line)
+            for pat_fx in self.__raw_proc[pat_num + 1]:
+                curr_pattern = pat_fx(curr_pattern)
             pre_rendered.append(curr_pattern.copy())
             total_len = len(curr_pattern)/self.sample_rate
             print(
@@ -85,6 +94,8 @@ class Tracker():
             max_len = max([len(i) for i in pre_rendered])
             rendered = np.sum([np.append(i, np.zeros(max_len - len(i)))
                               for i in pre_rendered], axis=0)
+            for pat_fx in self.__raw_proc[0]:
+                rendered = pat_fx(rendered)
             wav_render(self.name, self.sample_rate, rendered)
 
 

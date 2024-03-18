@@ -28,4 +28,4 @@
 - [x] Out file name
 - [ ] Add stereo functionality
 - [ ] Documentation
-- [ ] Postprocessing
+- [x] Postprocessing
