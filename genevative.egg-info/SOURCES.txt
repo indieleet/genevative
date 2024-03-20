@@ -1,0 +1,8 @@
+README.md
+setup.py
+genevative/__init__.py
+genevative.egg-info/PKG-INFO
+genevative.egg-info/SOURCES.txt
+genevative.egg-info/dependency_links.txt
+genevative.egg-info/top_level.txt
+genevative/FX/__init__.py
