@@ -11,7 +11,7 @@
 - [ ] Freq of note = initial freq
 - [ ] Dur of note = intitial dur
 - [ ] Vel of note = intital vel
-- [ ] Some args to the fn
+- [x] Some args to the fn as params
 - [ ] Arpeggio
 - [ ] Note probability
 - [ ] Random pitch

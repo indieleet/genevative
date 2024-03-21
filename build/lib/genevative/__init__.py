@@ -6,7 +6,7 @@ class Tracker():
     def __init__(self, hz=44100, v=1, name="out"):
         self.sample_rate = hz
         self.volume = v
-        self.name = f"{name}.wav"
+        self.name = name
         self.__raw_instr = []
         self.__raw_pattern = []
         self.__raw_proc = [[],]
@@ -40,6 +40,7 @@ class Tracker():
             for n, line in enumerate(pattern):
                 freq_and_vel = []
                 repeats = 1
+                params = tuple()
                 if n == 0:
                     freq = line[0]
                     dur = line[1]
@@ -49,7 +50,7 @@ class Tracker():
                 if line_len > 0:
                     instr = line[0]
                 else:
-                    def instr(x, y, w, z): return np.zeros(int(y))
+                    def instr(x, y, w, z, p): return np.zeros(int(y))
                 if line_len > 1:
                     freq *= line[1]
                     total_freq *= line[1]
@@ -81,9 +82,11 @@ class Tracker():
                             freq_and_vel = [(freq_and_vel[0][0], line[fxi][1])]
                         if (line[fxi][0] == 5) or (line[fxi][0] == "rn"):
                             repeats = line[fxi][1]
+                        if (line[fxi][0] == 6) or (line[fxi][0] == "sp"):
+                            params = line[fxi][1:]
                 # TODO: make args to fn optional
                 added_line = np.tile(np.sum([instr(self.sample_rate/i[0], dur*self.sample_rate,
-                                                   i[1], self.sample_rate) for i in freq_and_vel], axis=0), repeats)
+                                                   i[1], self.sample_rate, params) for i in freq_and_vel], axis=0), repeats)
                 curr_pattern = np.append(curr_pattern, added_line)
             for pat_fx in self.__raw_proc[pat_num + 1]:
                 curr_pattern = pat_fx(curr_pattern)
@@ -96,4 +99,4 @@ class Tracker():
                               for i in pre_rendered], axis=0)
             for pat_fx in self.__raw_proc[0]:
                 rendered = pat_fx(rendered)
-            wav_render(self.name, self.sample_rate, rendered)
+            wav_render(f"{self.name}.wav", self.sample_rate, rendered)
