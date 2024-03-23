@@ -37,7 +37,7 @@ class Tracker():
             total_dur = 1
             total_vel = 1
             total_len = 1
-            curr_pattern = np.array([], dtype="float64")
+            curr_pattern = np.array([[], []], dtype="float64")
             for n, line in enumerate(pattern):
                 freq_and_vel = []
                 repeats = 1
@@ -100,8 +100,9 @@ class Tracker():
                                                    i[1], self.sample_rate, params) for i in freq_and_vel], axis=0), repeats)
                 if added_line.ndim == 1:
                     added_line = np.resize(
-                        added_line, (added_line.shape[-1], 2))
-                curr_pattern = np.append(curr_pattern, added_line)
+                        added_line, (2, added_line.shape[-1]))
+                curr_pattern = np.concatenate(
+                    (curr_pattern, added_line), axis=1)
                 if dur_hist:
                     dur = dur_hist
             for pat_fx in self.__raw_proc[pat_num + 1]:
@@ -115,4 +116,4 @@ class Tracker():
                               for i in pre_rendered], axis=0)
             for pat_fx in self.__raw_proc[0]:
                 rendered = pat_fx(rendered)
-            wav_render(f"{self.name}.wav", self.sample_rate, rendered)
+            wav_render(f"{self.name}.wav", self.sample_rate, rendered.T)
