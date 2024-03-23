@@ -26,6 +26,6 @@
 ### Overall Improvements
 - [ ] Automatic play
 - [x] Out file name
-- [ ] Add stereo functionality
+- [x] Add stereo functionality
 - [ ] Documentation
 - [x] Postprocessing

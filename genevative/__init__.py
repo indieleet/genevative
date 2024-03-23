@@ -31,6 +31,7 @@ class Tracker():
         vel = 1
         pre_rendered = []
         rendered = []
+        dur_hist = []
         for pat_num, pattern in enumerate(self.__raw_pattern):
             total_freq = 1
             total_dur = 1
@@ -41,6 +42,7 @@ class Tracker():
                 freq_and_vel = []
                 repeats = 1
                 params = tuple()
+                dur_hist = 0
                 if n == 0:
                     freq = line[0]
                     dur = line[1]
@@ -77,6 +79,7 @@ class Tracker():
                         if (line[fxi][0] == 2) or (line[fxi][0] == "cf"):
                             freq_and_vel = [(line[fxi][1], freq_and_vel[0][1])]
                         if (line[fxi][0] == 3) or (line[fxi][0] == "cd"):
+                            dur_hist = dur
                             dur = line[fxi][1]
                         if (line[fxi][0] == 4) or (line[fxi][0] == "cv"):
                             freq_and_vel = [(freq_and_vel[0][0], line[fxi][1])]
@@ -84,10 +87,23 @@ class Tracker():
                             repeats = line[fxi][1]
                         if (line[fxi][0] == 6) or (line[fxi][0] == "sp"):
                             params = line[fxi][1:]
+                        if (line[fxi][0] == 7) or (line[fxi][0] == "of"):
+                            freq = line[fxi][1]
+                            freq_and_vel = [(freq, freq_and_vel[0][1])]
+                        if (line[fxi][0] == 8) or (line[fxi][0] == "od"):
+                            dur = line[fxi][1]
+                        if (line[fxi][0] == 9) or (line[fxi][0] == "ov"):
+                            vel = line[fxi][1]
+                            freq_and_vel = [(freq_and_vel[0][0], vel)]
                 # TODO: make args to fn optional
                 added_line = np.tile(np.sum([instr(self.sample_rate/i[0], dur*self.sample_rate,
                                                    i[1], self.sample_rate, params) for i in freq_and_vel], axis=0), repeats)
+                if added_line.ndim == 1:
+                    added_line = np.resize(
+                        added_line, (added_line.shape[-1], 2))
                 curr_pattern = np.append(curr_pattern, added_line)
+                if dur_hist:
+                    dur = dur_hist
             for pat_fx in self.__raw_proc[pat_num + 1]:
                 curr_pattern = pat_fx(curr_pattern)
             pre_rendered.append(curr_pattern.copy())

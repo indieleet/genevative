@@ -5,8 +5,8 @@ from os import system
 # |%%--%%| <kx03m4KW5W|gYFqzNKQ1Z>
 
 
-def i1(dur, freq, vel, hz, params):
-    return FX.sin(int(dur), int(freq))
+def i1(freq, dur, vel, hz, params):
+    return FX.slope(FX.sin(int(freq), int(dur)), dur)
 
 
 def fx1(arr):
@@ -25,7 +25,7 @@ t.add_pattern(
      [i1, 3/2, 3/7],
      [i1, 3/2],
      [i1, 4/5]]*2 +
-    [[i1, 5/2, 1/3, 1, ("cf", 440), ("rn", 6)],
+    [[i1, 5/2, 1/3, 1, ("of", 440), ("od", 1), ("rn", 6)],
      [i1, 3/2, 3/2],
      [i1, 3/2],
      [i1, 4/5]]*4)
