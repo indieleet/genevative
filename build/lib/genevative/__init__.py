@@ -108,12 +108,13 @@ class Tracker():
             for pat_fx in self.__raw_proc[pat_num + 1]:
                 curr_pattern = pat_fx(curr_pattern)
             pre_rendered.append(curr_pattern.copy())
-            total_len = len(curr_pattern)/self.sample_rate
+            total_len = curr_pattern.shape[-1]/self.sample_rate
             print(
                 f"n:{pat_num:.2f} f:{total_freq:.2f} d:{total_dur:.2f} v:{total_vel:.2f} l:{total_len:.2f}")
             max_len = max([len(i) for i in pre_rendered])
-            rendered = np.sum([np.append(i, np.zeros(max_len - len(i)))
-                              for i in pre_rendered], axis=0)
+            rendered = np.sum([np.concatenate(
+                (i, np.zeros((2, max_len - len(i)))), axis=1) for i in pre_rendered], axis=0)
+            print(rendered)
             for pat_fx in self.__raw_proc[0]:
                 rendered = pat_fx(rendered)
             wav_render(f"{self.name}.wav", self.sample_rate, rendered.T)

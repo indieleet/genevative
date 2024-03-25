@@ -10,10 +10,10 @@ def i1(freq, dur, vel, hz, params):
 
 
 def fx1(arr):
-    mat = FX.slope(np.resize(np.linspace(-1, 1, 44100//3), 3*44100), 3*44100)
-    print(arr)
-    c1 = np.convolve(arr[:, 0], mat)
-    c2 = np.convolve(arr[:, 1], mat)
+    mat = FX.slope(np.resize(np.linspace(-1, 1, 44100//3),
+                   int(1/8*44100)), int(1/8*44100))
+    c1 = np.convolve(arr[0], mat, mode="same")
+    c2 = np.convolve(arr[1], mat, mode="same")
     return np.vstack((c1, c2), dtype=np.float64)+arr
 # |%%--%%| <gYFqzNKQ1Z|ng31yDiil3>
 
