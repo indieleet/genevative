@@ -7,15 +7,22 @@ from scipy.signal import fftconvolve
 
 
 def i1(freq, dur, vel, hz, params):
-    return FX.slope(np.resize(np.sin(np.linspace(0, 2*np.pi, int(freq))), int(dur)), dur//2)
+    return FX.slope(np.resize(np.linspace(-1, 1, int(freq)), int(dur)), dur//2)
 
 
 def fx1(arr):
-    mat = (np.resize(FX.slope(np.random.random(44100), int(1/8*44100)),
-                     int(3*44100)))
+    # mat = (np.resize(FX.slope(np.random.random(44100), int(1/8*44100)),
+    #                 int(3*44100)))
+    # mat = np.sin(np.linspace(0, np.pi, 2048))
+    mat = np.zeros(65)
+    mat[32] = 1
     c1 = fftconvolve(arr[0], mat, mode="same")
     c2 = fftconvolve(arr[1], mat, mode="same")
-    return np.vstack((c1, c2), dtype=np.float64)*0.1+arr*0.3
+    return np.vstack((c1, c2), dtype=np.float64)*0.1
+def fx2(arr):
+    c1 = FX.delay(arr[0], 44100//2-10, 0.75) + arr[0]
+    c2 = FX.delay(arr[1], 44100//2, 0.75) + arr[1]
+    return np.vstack((c1, c2), dtype=np.float64)
 # |%%--%%| <gYFqzNKQ1Z|ng31yDiil3>
 
 
@@ -33,7 +40,8 @@ t.add_pattern(
      [i1, 3/2, 3/2, 1, ("la", 7/5)],
      [i1, 3/2],
      [i1, 4/5]]*4)
-t.add_fx(0, fx1)
+#t.add_fx(0, fx1)
+t.add_fx(0, fx2)
 # t.add_fx(0, lambda arr: FX.clip(arr, 6))
 # |%%--%%| <ng31yDiil3|kSQMfPinep>
 t.render()

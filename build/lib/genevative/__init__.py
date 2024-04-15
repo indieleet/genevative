@@ -114,7 +114,6 @@ class Tracker():
             max_len = max([len(i) for i in pre_rendered])
             rendered = np.sum([np.concatenate(
                 (i, np.zeros((2, max_len - len(i)))), axis=1) for i in pre_rendered], axis=0)
-            print(rendered)
             for pat_fx in self.__raw_proc[0]:
                 rendered = pat_fx(rendered)
             wav_render(f"{self.name}.wav", self.sample_rate, rendered.T)

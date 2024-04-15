@@ -1,5 +1,6 @@
 import numpy as np
-
+import rustimport.import_hook
+from .delay import del_line as delay
 
 def saw(freq: float | int, dur: float | int):
     return np.resize(np.linspace(-1, 1, int(freq)), int(dur))

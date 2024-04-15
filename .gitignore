@@ -1,3 +1,5 @@
 __pycache__/
 .jukit/
 *.wav
+build/
+genevative.egg-info/
