@@ -3,14 +3,14 @@ import numpy as np
 from os import system
 
 
-def i1(freq, dur, vel, hz):
+def i1(freq, dur, vel, hz, params):
     env = np.resize(np.linspace(0, 1, int(dur)), int(dur)) ** 3
     # bend = np.linspace(0,1,len(arr))**3
     # iar = np.interp(bend, np.linspace(0,1, len(arr)), arr)*0.1
     return np.resize(np.linspace(-1, 1, int(freq)), int(dur)) * vel * env
 
 
-def i2(freq, dur, vel, hz):
+def i2(freq, dur, vel, hz, params):
     dur1 = 1 / 8
     return (np.random.rand(int(dur)) * 2 - 1) * np.resize(
         np.append(
@@ -21,7 +21,7 @@ def i2(freq, dur, vel, hz):
     )
 
 
-def i3(freq, dur, vel, hz):
+def i3(freq, dur, vel, hz, params):
     env = np.resize(np.linspace(0, 1, int(dur * 1 / 8)), int(dur)) ** 4
     return (
         np.resize(
@@ -33,7 +33,7 @@ def i3(freq, dur, vel, hz):
     )
 
 
-def i4(freq, dur, vel, hz):
+def i4(freq, dur, vel, hz, params):
     env = np.append(np.linspace(0, 1, hz // 8) ** 4, np.zeros(int(hz * 3 / 8)))
     arr = np.resize(
         np.append(np.sin(np.linspace(-1, 1, int(freq))),
@@ -54,7 +54,7 @@ def i4(freq, dur, vel, hz):
 t = genevative.Tracker()
 t.add_pattern(
     [[440, 4, 1]]
-    + [[lambda x, y, w, z: np.zeros(int(y)), 1, 1], [i1, 1, 2, 1]]
+    + [[lambda x, y, w, z, h: np.zeros(int(y)), 1, 1], [i1, 1, 2, 1]]
     + [
         [i1, 1, 1 / 2, 0.25, (0, 3 / 2), (0, 64 / 63), (0, 63 / 64)],
         [i1, 1, 1 / 3, 1, ("cd", 2), ("cf", 100), ("cv", 0.5)],

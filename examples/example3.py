@@ -19,9 +19,14 @@ def fx1(arr):
     c1 = fftconvolve(arr[0], mat, mode="same")
     c2 = fftconvolve(arr[1], mat, mode="same")
     return np.vstack((c1, c2), dtype=np.float64)*0.1
+
 def fx2(arr):
     c1 = FX.delay(arr[0], 44100//2-10, 0.75) + arr[0]
     c2 = FX.delay(arr[1], 44100//2, 0.75) + arr[1]
+    return np.vstack((c1, c2), dtype=np.float64)
+def fx3(arr):
+    c1 = FX.delay(arr[0], 44100//6-10, 0.6) + arr[0]
+    c2 = FX.delay(arr[1], 44100//6, 0.61) + arr[1]
     return np.vstack((c1, c2), dtype=np.float64)
 # |%%--%%| <gYFqzNKQ1Z|ng31yDiil3>
 
@@ -33,15 +38,17 @@ t.add_pattern(
     [[i1, 1],
      [],
      [i1, 1/2, 2, 1/2],
-     [i1, 3/2, 3/7],
-     [i1, 3/2],
-     [i1, 4/5]]*2 +
-    [[i1, 5/2, 1/3, 1, ("of", 440), ("od", 1), ("rn", 6)],
-     [i1, 3/2, 3/2, 1, ("la", 7/5)],
+     [i1, 3/2, 3/7], [i1, 3/2], [i1, 4/5]]*2 + [[i1, 5/2, 1/3, 1, ("of", 440), ("od", 1), ("rn", 6)], [i1, 3/2, 3/2, 1, ("la", 7/5)],
      [i1, 3/2],
      [i1, 4/5]]*4)
 #t.add_fx(0, fx1)
-t.add_fx(0, fx2)
+t.add_pattern([[880,1,1]]+
+               [[i1,1,4/3,1, ("of", 880)],
+               [],
+               [i1,3/2,1]]*6)
+t.add_fx(0,fx2)
+t.add_fx(2,fx3) 
+
 # t.add_fx(0, lambda arr: FX.clip(arr, 6))
 # |%%--%%| <ng31yDiil3|kSQMfPinep>
 t.render()

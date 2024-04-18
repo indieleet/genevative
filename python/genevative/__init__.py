@@ -95,8 +95,7 @@ class Tracker():
                             vel = line[fxi][1]
                             freq_and_vel = [(freq_and_vel[0][0], vel)]
                 # TODO: make args to fn optional
-                added_line = np.tile(np.sum([instr(self.sample_rate/i[0], dur*self.sample_rate,
-                                                   i[1], self.sample_rate, params) for i in freq_and_vel], axis=0), repeats)
+                added_line = np.tile(np.sum([instr(self.sample_rate/i[0], dur*self.sample_rate, i[1], self.sample_rate, params) for i in freq_and_vel], axis=0), repeats)
                 if added_line.ndim == 1:
                     added_line = np.resize(
                         added_line, (2, added_line.shape[-1]))
@@ -110,9 +109,11 @@ class Tracker():
             total_len = curr_pattern.shape[-1]/self.sample_rate
             print(
                 f"n:{pat_num:.2f} f:{total_freq:.2f} d:{total_dur:.2f} v:{total_vel:.2f} l:{total_len:.2f}")
-            max_len = max([len(i) for i in pre_rendered])
-            rendered = np.sum([np.concatenate(
-                (i, np.zeros((2, max_len - len(i)))), axis=1) for i in pre_rendered], axis=0)
-            for pat_fx in self.__raw_proc[0]:
-                rendered = pat_fx(rendered)
-            wav_render(f"{self.name}.wav", self.sample_rate, rendered.T)
+        max_len = max([i.shape[-1] for i in pre_rendered])
+        all_tracks = [np.concatenate(
+            (i, np.zeros((2, max_len - i.shape[-1]))), axis=1) if (max_len !=i.shape[-1]) else i for i in pre_rendered]
+        all_tracks = np.array(all_tracks)
+        rendered = np.sum(all_tracks, axis=0)
+        for pat_fx in self.__raw_proc[0]:
+            rendered = pat_fx(rendered)
+        wav_render(f"{self.name}.wav", self.sample_rate, rendered.T)
