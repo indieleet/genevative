@@ -1,8 +1,18 @@
 import numpy as np
 from scipy.io.wavfile import write as wav_render
+from typing import Callable
 
 class Tracker():
-    def __init__(self, hz=44100, v=1, name="out"):
+    """
+    Class to create a Tracker.
+    You can specify sample rate, volume or name of output file via parameters (t=genevative.Tracker(hz=44100, v=1, name="out")) or via dot (t.sample_rate = 44100, t.volume = 0.5, t.name = "input").
+    Available methods:
+    add_instr
+    add_pattern
+    add_fx
+    render
+    """
+    def __init__(self, hz: int=44100, v: float=1, name: str="out"):
         self.sample_rate = hz
         self.volume = v
         self.name = name
@@ -10,16 +20,40 @@ class Tracker():
         self.__raw_pattern = []
         self.__raw_proc = [[],]
 
-    def add_instr(self, instr):
+    def add_instr(self, instr: Callable) -> int:
+        """
+        Adds instrument that you can use in patter. If you want it.
+        """
         self.__raw_instr.append(instr)
         return len(self.__raw_instr)
 
-    def add_pattern(self, pattern):
+    def add_pattern(self, pattern: list) -> int:
+        """
+        Adds pattern to your tracker.
+        Specification of pattern:
+        * - means that parameter is optional
+        [[initial frequency, initial length, initial velocity],
+        [instrument of first note*, frequency of first note*, length of first note*, velocity of first note*, first note effect of first note*, second note effect of first note*, ... last note effect of first note*],
+        [instrument of second note*, frequency of second note*, length of second note*, velocity of second note*, first note effect of second note*, second note effect of second note*, ... last note effect of second note*],
+        ...
+        [instrument of last note*, frequency of last note*, length of last note*, velocity of last note*, first note effect of last note*, second note effect of last note*, ... last note effect of last note*]]
+        Available note effects:
+        0 or ln: Layer new Notes relative to previous
+        1 or la: Layer new note Additive
+        2 or cf: use Constant Frequency for one line
+        3 or cd: use Constant Duration for one line
+        4 or cv: use Constant Velocity for one line
+        5 or rn: Repeat Note
+        6 or sp: Send Parameters
+        7 or of: Override current Frequency with constant value
+        8 or od: Override current Duration with constant value
+        9 or ov: Override current Velocity with constant value
+        """
         self.__raw_pattern.append(pattern)
         self.__raw_proc.append([])
         return len(self.__raw_pattern)
 
-    def add_fx(self, pattern_number, fx):
+    def add_fx(self, pattern_number: int, fx: Callable):
         if pattern_number == "main":
             pattern_number = 0
         self.__raw_proc[pattern_number].append(fx)
