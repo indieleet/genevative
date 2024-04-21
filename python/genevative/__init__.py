@@ -16,6 +16,7 @@ class Tracker():
         self.sample_rate = hz
         self.volume = v
         self.name = name
+        self.master = []
         self.__raw_instr = []
         self.__raw_pattern = []
         self.__raw_proc = [[],]
@@ -53,10 +54,20 @@ class Tracker():
         self.__raw_proc.append([])
         return len(self.__raw_pattern)
 
-    def add_fx(self, pattern_number: int, fx: Callable):
+    def add_fx(self, pattern_number: int, fx: Callable, aut: list|None = None):
         if pattern_number == "main":
             pattern_number = 0
-        self.__raw_proc[pattern_number].append(fx)
+        if aut == None:
+            aut = np.ones(self.master[pattern_number].shape)
+        if type(aut) == float:
+            aut = np.full(self.master[pattern_number].shape, aut, dtype=np.float64)
+        if pattern_number == 0:
+            #self.__raw_proc[0].append((fx, aut))
+            self.master[0] = fx(self.master[0])*aut + self.master[0]*(1.-aut)
+            return None
+        self.master[0] = self.master[0] - self.master[pattern_number]
+        self.master[pattern_number] = fx(self.master[pattern_number])*aut+ self.master[pattern_number]*(1.-aut)
+        self.master[0] = self.master[0] + self.master[pattern_number]
 
     def render(self):
         freq = 440
@@ -137,17 +148,20 @@ class Tracker():
                     (curr_pattern, added_line), axis=1)
                 if dur_hist:
                     dur = dur_hist
-            for pat_fx in self.__raw_proc[pat_num + 1]:
-                curr_pattern = pat_fx(curr_pattern)
+            #for pat_fx in self.__raw_proc[pat_num + 1]:
+            #    curr_pattern = pat_fx(curr_pattern)
             pre_rendered.append(curr_pattern.copy())
             total_len = curr_pattern.shape[-1]/self.sample_rate
             print(
-                f"n:{pat_num:.2f} f:{total_freq:.2f} d:{total_dur:.2f} v:{total_vel:.2f} l:{total_len:.2f}")
+                f"n:{pat_num:d} f:{total_freq:.2f} d:{total_dur:.2f} v:{total_vel:.2f} l:{total_len:.2f}")
         max_len = max([i.shape[-1] for i in pre_rendered])
         all_tracks = [np.concatenate(
-            (i, np.zeros((2, max_len - i.shape[-1]))), axis=1) if (max_len !=i.shape[-1]) else i for i in pre_rendered]
-        all_tracks = np.array(all_tracks)
+            (i, np.zeros((2, max_len - i.shape[-1]))), axis=1) if (max_len != i.shape[-1]) else i for i in pre_rendered]
         rendered = np.sum(all_tracks, axis=0)
-        for pat_fx in self.__raw_proc[0]:
-            rendered = pat_fx(rendered)
-        wav_render(f"{self.name}.wav", self.sample_rate, rendered.T)
+        #for pat_fx in self.__raw_proc[0]:
+        #    rendered = pat_fx[0](rendered)*pat_fx[1]+rendered*(1.-pat_fx[1])
+        self.master = [rendered, *all_tracks]
+        #wav_render(f"{self.name}.wav", self.sample_rate, rendered.T)
+
+    def save(self):
+        wav_render(f"{self.name}.wav", self.sample_rate, self.master[0].T)

@@ -5,8 +5,9 @@ from os import system
 from scipy.signal import fftconvolve
 # |%%--%%| <kx03m4KW5W|gYFqzNKQ1Z>
 
+
 def i1(freq, dur, vel, hz, params):
-    return FX.slope(np.resize(np.linspace(-1, 1, int(freq)), int(dur)), dur//2)*0.5
+    return FX.slope(np.resize(np.linspace(-1, 1, int(freq)), int(dur)), dur//2)
 
 def i2(freq, dur, vel, hz, params):
     time = hz//64
@@ -44,11 +45,6 @@ def fx5(arr):
     c2 = np.interp(interp, np.linspace(0,1,arr.shape[-1]), arr[1])
     return np.vstack((c1, c2), dtype=np.float64)
 
-def fx6(arr):
-    c1 = FX.biquad(arr[0])
-    c2 = FX.delay(arr[1])
-    return np.vstack((c1, c2), dtype=np.float64)
-
 silence = lambda f,d,v,h,p:np.zeros(int(d))
 # |%%--%%| <gYFqzNKQ1Z|ng31yDiil3>
 
@@ -84,14 +80,14 @@ t.add_pattern([[660,1/8,0.2]]+
               [[i2, 1, 1/3, 1, ("rn", 12)],
                [silence, 1, 64, 1, ("od",4)],
                [i2, 1, 1/4, 1]])
+t.render()
 t.add_fx(0,fx2)
 t.add_fx(2,fx3) 
 t.add_fx(0,fx4)
 t.add_fx(0,fx1)
 t.add_fx(0,fx5)
-t.add_fx(0,fx6)
 # t.add_fx(0, lambda arr: FX.clip(arr, 6))
 # |%%--%%| <ng31yDiil3|kSQMfPinep>
-t.render()
+t.save()
 # |%%--%%| <kSQMfPinep|M2bCzvZLBh>
 system("ffplay -loop 0 -i 3.wav 2> /dev/null")
