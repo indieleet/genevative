@@ -5,7 +5,6 @@ from os import system
 from scipy.signal import fftconvolve
 # |%%--%%| <kx03m4KW5W|gYFqzNKQ1Z>
 
-
 def i1(freq, dur, vel, hz, params):
     return FX.slope(np.resize(np.linspace(-1, 1, int(freq)), int(dur)), dur//2)
 
@@ -89,4 +88,4 @@ t.add_fx(0,fx5)
 # |%%--%%| <ng31yDiil3|kSQMfPinep>
 t.render()
 # |%%--%%| <kSQMfPinep|M2bCzvZLBh>
-system("ffplay -i 3.wav 2> /dev/null")
+system("ffplay -loop 0 -i 3.wav 2> /dev/null")
