@@ -60,10 +60,10 @@ class Tracker():
         if pattern_number == 0:
             #self.__raw_proc[0].append((fx, aut))
             self.master[0] = fx(self.master[0])*aut + self.master[0]*(1.-aut)
-            return None
-        self.master[0] = self.master[0] - self.master[pattern_number]
-        self.master[pattern_number] = fx(self.master[pattern_number])*aut+ self.master[pattern_number]*(1.-aut)
-        self.master[0] = self.master[0] + self.master[pattern_number]
+        else:
+            self.master[0] = self.master[0] - self.master[pattern_number]
+            self.master[pattern_number] = fx(self.master[pattern_number])*aut+ self.master[pattern_number]*(1.-aut)
+            self.master[0] = self.master[0] + self.master[pattern_number]
 
     def render(self):
         freq = 440
@@ -161,3 +161,54 @@ class Tracker():
 
     def save(self, i: int = 0):
         wav_render(f"{self.name}.wav", self.sample_rate, self.master[i].T)
+    def save_daw(self):
+        with open("project.xml", "w") as f:
+            head = ('<?xml version="1.0" encoding="UTF-8" standalone="yes"?>\n'
+            '<Project version="1.0">\n'
+            '<Application name="Bitwig Studio" version="5.0"/>\n'
+            '<Transport>\n'
+            '<Tempo max="666.000000" min="20.000000" unit="bpm" value="149.000000" id="id0" name="Tempo"/>\n'
+            '<TimeSignature denominator="4" numerator="4" id="id1"/>\n'
+            '</Transport>\n')
+            main = ('<Structure>\n'
+                    '<Track contentType="audio" loaded="true" id="id2" name="Drumloop" color="#b53bba">\n'
+                    '<Channel audioChannels="2" destination="id15" role="regular" solo="false" id="id10">\n'
+                    '<Mute value="false" id="id5" name="Mute"/>\n'
+                    '<Pan max="1.000000" min="0.000000" unit="normalized" value="0.500000" id="id4" name="Pan"/>\n'
+                    '<Volume max="2.000000" min="0.000000" unit="linear" value="0.177125" id="id3" name="Volume"/>\n'
+                    '</Channel>\n'
+                    '</Track>\n')
+            master = ('<Track contentType="audio notes" loaded="true" id="id6" name="Master">\n'
+            '<Channel audioChannels="2" role="master" solo="false" id="id7">\n'
+            '<Mute value="false" id="id10" name="Mute"/>\n'
+            '<Pan max="1.000000" min="0.000000" unit="normalized" value="0.500000" id="id9" name="Pan"/>\n'
+            '<Volume max="2.000000" min="0.000000" unit="linear" value="1.000000" id="id8" name="Volume"/>\n'
+            '</Channel>\n'
+            '</Track>\n')
+            added = ('<Arrangement id="id19">\n'
+    '<Lanes timeUnit="beats" id="id20">\n'
+      '<Lanes track="id9" id="id24">\n'
+        '<Clips id="id25">\n'
+          '<Clip time="0.0" duration="8.00003433227539" playStart="0.0" loopStart="0.0" loopEnd="8.00003433227539" fadeTimeUnit="beats" fadeInTime="0.0" fadeOutTime="0.0" name="Drumfunk3 170bpm">\n'
+            '<Clips id="id26">\n'
+              '<Clip time="0.0" duration="8.00003433227539" contentTimeUnit="beats" playStart="0.0" fadeTimeUnit="beats" fadeInTime="0.0" fadeOutTime="0.0">\n'
+                '<Warps contentTimeUnit="seconds" timeUnit="beats" id="id28">\n'
+                  '<Audio algorithm="stretch" channels="2" duration="2.823541666666667" sampleRate="48000" id="id27">\n'
+                    '<File path="audio/1.wav"/>\n'
+                  '</Audio>\n'
+                  '<Warp time="0.0" contentTime="0.0"/>\n'
+                  '<Warp time="8.00003433227539" contentTime="2.823541666666667"/>\n'
+                '</Warps>\n'
+              '</Clip>\n'
+            '</Clips>\n'
+          '</Clip>\n'
+        '</Clips>\n'
+      '</Lanes>\n'
+      '<Lanes track="id14" id="id29">\n'
+        '<Clips id="id30"/>\n'
+      '</Lanes>\n'
+    '</Lanes>\n'
+  '</Arrangement>\n'
+  '<Scenes/>\n'
+'</Project>\n')
+            f.write(head+main+master+added)
