@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<Project version="1.0">
+    <Application name="Bitwig Studio" version="5.1.7"/>
+    <Transport>
+        <Tempo max="666.000000" min="20.000000" unit="bpm" value="110.000000" id="id0" name="Tempo"/>
+        <TimeSignature denominator="4" numerator="4" id="id1"/>
+    </Transport>
+    <Structure>
+        <Track contentType="audio" loaded="true" id="id2" name="120_A_Strings_1" color="#d99d10">
+            <Channel audioChannels="2" destination="id8" role="regular" solo="false" id="id3">
+                <Mute value="false" id="id6" name="Mute"/>
+                <Pan max="1.000000" min="0.000000" unit="normalized" value="0.500000" id="id5" name="Pan"/>
+                <Volume max="2.000000" min="0.000000" unit="linear" value="0.316228" id="id4" name="Volume"/>
+            </Channel>
+        </Track>
+        <Track contentType="audio notes" loaded="true" id="id7" name="Master">
+            <Channel audioChannels="2" role="master" solo="false" id="id8">
+                <Mute value="false" id="id11" name="Mute"/>
+                <Pan max="1.000000" min="0.000000" unit="normalized" value="0.500000" id="id10" name="Pan"/>
+                <Volume max="2.000000" min="0.000000" unit="linear" value="1.000000" id="id9" name="Volume"/>
+            </Channel>
+        </Track>
+    </Structure>
+    <Arrangement id="id12">
+        <Lanes timeUnit="beats" id="id13">
+            <Lanes track="id2" id="id14">
+                <Clips id="id15">
+                    <Clip time="0.0" duration="14.666666984558105" playStart="0.0" loopStart="0.0" loopEnd="26.88888931274414" fadeTimeUnit="beats" fadeInTime="0.0" fadeOutTime="0.0" name="120_A_Strings_1">
+                        <Clips id="id16">
+                            <Clip time="0.0" duration="14.666666984558105" contentTimeUnit="seconds" playStart="0.0" playStop="8.0" fadeTimeUnit="beats" fadeInTime="0.0" fadeOutTime="0.0">
+                                <Audio algorithm="raw" channels="2" sampleRate="44100" duration="8.0" id="id17">
+                                    <File path="audio/120_A_Strings_1.wav"/>
+                                </Audio>
+                            </Clip>
+                        </Clips>
+                    </Clip>
+                </Clips>
+            </Lanes>
+            <Lanes track="id7" id="id18">
+                <Clips id="id19"/>
+            </Lanes>
+        </Lanes>
+    </Arrangement>
+    <Scenes/>
+</Project>
