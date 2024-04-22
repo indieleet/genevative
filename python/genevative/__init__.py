@@ -54,13 +54,9 @@ class Tracker():
         self.__raw_proc.append([])
         return len(self.__raw_pattern)
 
-    def add_fx(self, pattern_number: int, fx: Callable, aut: list|None = None):
+    def add_fx(self, pattern_number: int|str, fx: Callable, aut: list|float = 1.):
         if pattern_number == "main":
             pattern_number = 0
-        if aut == None:
-            aut = np.ones(self.master[pattern_number].shape)
-        if type(aut) == float:
-            aut = np.full(self.master[pattern_number].shape, aut, dtype=np.float64)
         if pattern_number == 0:
             #self.__raw_proc[0].append((fx, aut))
             self.master[0] = fx(self.master[0])*aut + self.master[0]*(1.-aut)
@@ -163,5 +159,5 @@ class Tracker():
         self.master = [rendered, *all_tracks]
         #wav_render(f"{self.name}.wav", self.sample_rate, rendered.T)
 
-    def save(self):
-        wav_render(f"{self.name}.wav", self.sample_rate, self.master[0].T)
+    def save(self, i: int = 0):
+        wav_render(f"{self.name}.wav", self.sample_rate, self.master[i].T)

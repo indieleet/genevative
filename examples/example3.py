@@ -13,7 +13,7 @@ def i2(freq, dur, vel, hz, params):
     time = hz//64
     if (time>int(dur)):
         time = int(dur)
-    env = np.append(np.ones(time), np.zeros(int(dur-time)))
+    env = np.append(np.linspace(1,0,time), np.zeros(int(dur-time)))
     return (np.random.rand(int(dur))-0.5)*env
 def fx1(arr):
     # mat = (np.resize(FX.slope(np.random.random(44100), int(1/8*44100)),
@@ -45,6 +45,10 @@ def fx5(arr):
     c2 = np.interp(interp, np.linspace(0,1,arr.shape[-1]), arr[1])
     return np.vstack((c1, c2), dtype=np.float64)
 
+def fx6(arr):
+    c1 = np.zeros(arr.shape[-1])
+    return np.vstack((c1, c1), dtype=np.float64)
+
 silence = lambda f,d,v,h,p:np.zeros(int(d))
 # |%%--%%| <gYFqzNKQ1Z|ng31yDiil3>
 
@@ -66,9 +70,13 @@ t.add_pattern(
      [i1, 7/3, 1/8, 1/2, ("rn", 6)],
      [i1, 3/2, 1, 1, ("rn", 6)],
      [i1, 4/5, 1, 1, ("rn", 6)],
-     [i1, 1, 1, 1, ("of", 329)]
+     [i1, 1, 1, 1, ("of", 329)],
+     [i1, 1/2, 8, 1],
+     [i1, 1/2, 1, 1],
+     [i1, 3/2, 1, 1],
+     [i1, 4/3, 1, 1]
      ])
-t.add_pattern([[880,1,1]]+
+t.add_pattern([[880,1,0.3]] +
                [[i1,1,4/3,1, ("of", 880)],
                [],
               [i1,3/2,1]]*6 +
@@ -86,7 +94,10 @@ t.add_fx(2,fx3)
 t.add_fx(0,fx4)
 t.add_fx(0,fx1)
 t.add_fx(0,fx5)
-# t.add_fx(0, lambda arr: FX.clip(arr, 6))
+fx6_arr = np.abs(t.master[3].copy())
+fx6_arr[fx6_arr>0.0] = 1
+t.add_fx(1,fx6,fx6_arr)
+t.add_fx(2,fx6,fx6_arr)
 # |%%--%%| <ng31yDiil3|kSQMfPinep>
 t.save()
 # |%%--%%| <kSQMfPinep|M2bCzvZLBh>
