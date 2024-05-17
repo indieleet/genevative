@@ -50,6 +50,16 @@ def fx6(arr):
     c1 = np.zeros(arr.shape[-1])
     return np.vstack((c1, c1), dtype=np.float64)
 
+def fx7(arr):
+    c1 = arr[0]*0.25
+    c2 = arr[1]*0.25
+    return np.vstack((c1, c2), dtype=np.float64)
+
+def fx8(arr):
+    c1 = FX.grain(arr[0], len(arr[0])*16, 80000)
+    c2 = FX.grain(arr[1], len(arr[1])*16, 80000)
+    return np.vstack((c1, c2), dtype=np.float64)
+
 silence = lambda f,d,v,h,p:np.zeros(int(d))
 # |%%--%%| <gYFqzNKQ1Z|ng31yDiil3>
 
@@ -92,18 +102,20 @@ t.add_pattern([[660,1/8,0.2]]+
 t.render()
 t.add_fx(0,fx2)
 t.add_fx(2,fx3) 
-t.add_fx(0,fx4)
 t.add_fx(0,fx1)
 t.add_fx(0,fx5)
 fx6_arr = np.abs(t.master[3].copy())
 fx6_arr[fx6_arr>0.0] = 1
 t.add_fx(1,fx6,fx6_arr)
 t.add_fx(2,fx6,fx6_arr)
+t.add_fx(0,fx4)
+t.add_fx(0,fx7)
 # |%%--%%| <ng31yDiil3|kSQMfPinep>
+t.add_fx(0,fx8)
 t.save()
-t.save_daw()
-plt.stairs(t.master[0][0][:64], fill=True)
-plt.savefig("out.png")
+#t.save_daw()
+#plt.stairs(t.master[0][0][:64], fill=True)
+#plt.savefig("out.png")
 #fig, ax = plt.subplot()
 #hist = ax.hist(t.master[0].flatten(),t.master.shape[-1]*2)
 #plt.show()

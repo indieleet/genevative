@@ -89,10 +89,9 @@ class Tracker():
                     vel = line[2]
                     continue
                 line_len = len(line)
-                if line_len > 0:
+                def instr(x, y, w, z, p): return np.zeros(int(y))
+                if (line_len > 0) and (line[0] != None):
                     instr = line[0]
-                else:
-                    def instr(x, y, w, z, p): return np.zeros(int(y))
                 if line_len > 1:
                     freq *= line[1]
                     total_freq *= line[1]

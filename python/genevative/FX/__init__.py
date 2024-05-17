@@ -35,12 +35,16 @@ def fix(arr, n_size):
 def conv(arr, mat):
     return np.convolve(arr, mat, mode="same")
 
-
 def slope(arr, dur):
     dur = int(dur)
     return arr*np.append(np.linspace(1, 0, dur), np.zeros(len(arr)-dur))
     
 def grain(arr, dur, n):
-    dur = int(dur)
-    return arr
+    init_len = len(arr)
+    arr = np.array(arr)
+    grain_len = int(np.ceil(dur/n))
+    arr = np.append(arr, np.zeros(n - (len(arr)%n)))
+    arr = np.array(np.split(arr, n))
+    arr = np.resize(arr, (arr.shape[0], grain_len))
+    return np.resize(arr.flatten(), init_len)
 #__all__ = ["saw", "sin", "tri", "sqr", "clip", "fix", "conv", "slope", "delay"]
