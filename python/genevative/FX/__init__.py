@@ -40,4 +40,7 @@ def slope(arr, dur):
     dur = int(dur)
     return arr*np.append(np.linspace(1, 0, dur), np.zeros(len(arr)-dur))
     
+def grain(arr, dur, n):
+    dur = int(dur)
+    return arr
 #__all__ = ["saw", "sin", "tri", "sqr", "clip", "fix", "conv", "slope", "delay"]
