@@ -44,7 +44,7 @@ def grain(arr, dur, n):
     arr = np.array(arr)
     grain_len = int(np.ceil(dur/n))
     arr = np.append(arr, np.zeros(n - (len(arr)%n)))
-    arr = np.array(np.split(arr, n))
-    arr = np.resize(arr, (arr.shape[0], grain_len))
-    return np.resize(arr.flatten(), init_len)
+    arr = np.split(arr, n)
+    arr = [np.resize(el, grain_len) for el in arr]
+    return np.resize(np.array(arr).flatten(), init_len)
 #__all__ = ["saw", "sin", "tri", "sqr", "clip", "fix", "conv", "slope", "delay"]

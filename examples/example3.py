@@ -56,8 +56,9 @@ def fx7(arr):
     return np.vstack((c1, c2), dtype=np.float64)
 
 def fx8(arr):
-    c1 = FX.grain(arr[0], len(arr[0])*16, 80000)
-    c2 = FX.grain(arr[1], len(arr[1])*16, 80000)
+    g_size = 300
+    c1 = FX.grain(arr[0], len(arr[0])*2, g_size)
+    c2 = FX.grain(arr[1], len(arr[1])*2, g_size)
     return np.vstack((c1, c2), dtype=np.float64)
 
 silence = lambda f,d,v,h,p:np.zeros(int(d))
