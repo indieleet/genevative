@@ -1,4 +1,3 @@
-
 use pyo3::prelude::*;
 
 #[pyfunction]
@@ -16,9 +15,9 @@ fn delay(dry: Vec<f64>, d_time: usize, feedback: f64) -> PyResult<Vec<f64>> {
 }
 
 //y(n) = ff1 * w(n) + ff2 * w(n - 1) + ff3 * w(n - 2) with w[n] = x[n] + fb1 * x[n - 1] + fb2 * x[n - 2]
-fn w(dry: &Vec<f64>, i: usize, fb1: f64, fb2: f64) -> f64 {
-    let (mut n0, mut n1, mut n2) = (0.0, 0.0, 0.0);
-    n0 = dry[i];
+fn w(dry: &[f64], i: usize, fb1: f64, fb2: f64) -> f64 {
+    let (mut n1, mut n2) = (0.0, 0.0);
+    let n0 = dry[i];
     if i>0 {
         n1 = dry[i-1];
     }
@@ -50,7 +49,7 @@ fn biquad(dry: Vec<f64>, coef: (f64, f64, f64, f64, f64)) -> PyResult<Vec<f64>> 
 
 
 #[pymodule]
-fn _lib(_py: Python<'_>, m: &PyModule) -> PyResult<()> {
+fn _lib(m: &Bound<'_, PyModule>) -> PyResult<()> {
     m.add_function(wrap_pyfunction!(delay, m)?)?;
     m.add_function(wrap_pyfunction!(biquad, m)?)?;
     Ok(())
