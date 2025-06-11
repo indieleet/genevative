@@ -1,6 +1,8 @@
 import numpy as np
-import rustimport.import_hook
-from .delay import del_line as delay
+try:
+    from .._lib import *
+except (ImportError, NotImplementedError):
+    pass
 
 def saw(freq: float | int, dur: float | int):
     return np.resize(np.linspace(-1, 1, int(freq)), int(dur))
@@ -36,7 +38,16 @@ def fix(arr, n_size):
 def conv(arr, mat):
     return np.convolve(arr, mat, mode="same")
 
-
 def slope(arr, dur):
     dur = int(dur)
     return arr*np.append(np.linspace(1, 0, dur), np.zeros(len(arr)-dur))
+    
+def grain(arr, dur, n):
+    init_len = len(arr)
+    arr = np.array(arr)
+    grain_len = int(np.ceil(dur/n))
+    arr = np.append(arr, np.zeros(n - (len(arr)%n)))
+    arr = np.split(arr, n)
+    arr = [np.resize(el, grain_len) for el in arr]
+    return np.resize(np.array(arr).flatten(), init_len)
+#__all__ = ["saw", "sin", "tri", "sqr", "clip", "fix", "conv", "slope", "delay"]

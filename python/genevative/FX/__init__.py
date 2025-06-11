@@ -1,5 +1,8 @@
 import numpy as np
-from .._lib import *
+try:
+    from .._lib import *
+except (ImportError, NotImplementedError):
+    pass
 
 def saw(freq: float | int, dur: float | int):
     return np.resize(np.linspace(-1, 1, int(freq)), int(dur))

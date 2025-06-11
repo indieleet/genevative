@@ -1,10 +1,16 @@
 [build-system]
-requires = ["setuptools", "setuptools-rust"]
+# Enable "setuptools-rust" to use effects written in Rust.
+requires = ["setuptools"]
+#requires = ["setuptools", "setuptools-rust"]
 build-backend = "setuptools.build_meta"
 
 [project]
 name = "genevative"
 version = "0.2.3"
+dependencies = [
+	"numpy",
+	"scipy"
+]
 
 [tool.setuptools.packages]
 # Pure Python packages/modules
