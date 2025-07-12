@@ -4,3 +4,4 @@ __pycache__/
 build/
 genevative.egg-info/
 target/
+uv.lock
