@@ -1,6 +1,7 @@
 import numpy as np
 from scipy.io.wavfile import write as wav_render
 from typing import Callable
+from .live import Live
 
 class Tracker():
     """
@@ -23,7 +24,7 @@ class Tracker():
 
     def add_instr(self, instr: Callable) -> int:
         """
-        Adds instrument that you can use in patter. If you want it.
+        Adds instrument that you can use in pattern. If you want it.
         """
         self.__raw_instr.append(instr)
         return len(self.__raw_instr)
