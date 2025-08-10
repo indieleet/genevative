@@ -13,7 +13,7 @@ class Live():
         self.idx = 0
         self.buffer = np.reshape(np.sin(np.zeros(1), dtype=np.float32), (-1, 1))
         self.jobs = BackgroundJobManager()
-        self.samplerate = sd.query_devices(0, 'output')['default_samplerate']
+        self.hz = sd.query_devices(0, 'output')['default_samplerate']
         self.jobs.new(self.main)
 
     async def play_buffer(self, **kwargs):
@@ -21,9 +21,9 @@ class Live():
         event = asyncio.Event()
 
         def callback(outdata, frame_count, time_info, status):
-            if status:
-                print(status)
-            outdata[:] = self.buffer[np.arange(self.idx, self.idx + frame_count) % len(self.buffer)]
+            #if status:
+            #    print(status)
+            outdata[:] = self.buffer[np.arange(self.idx, self.idx + frame_count) % self.buffer.shape[0]]
             self.idx += frame_count
 
         stream = sd.OutputStream(callback=callback, dtype=self.buffer.dtype,
@@ -34,10 +34,9 @@ class Live():
     def main(self): 
         asyncio.run(self.play_buffer())
 
-
     def replace(self, array, immediate=False):
         if not immediate:
-            rest = (self.buffer.shape[0] - self.idx % self.buffer.shape[0]) / self.samplerate
+            rest = (self.buffer.shape[0] - self.idx % self.buffer.shape[0]) / self.hz
             time.sleep(rest)
         self.buffer = np.reshape(array.astype(np.float32), (-1, 1))
     
@@ -48,6 +47,9 @@ class Live():
         if loop:
             array = np.resize(array, (length, 1))
         if not immediate:
-            rest = (self.buffer.shape[0] - self.idx % self.buffer.shape[0]) / self.samplerate
+            rest = (self.buffer.shape[0] - self.idx % self.buffer.shape[0]) / self.hz
             time.sleep(rest)
         self.buffer[:array.shape[0]] = self.buffer[:array.shape[0]] + array.astype(np.float32)
+
+    def stop(self):
+        self.replace(np.zeros(1), immediate=True)

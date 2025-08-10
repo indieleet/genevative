@@ -1,7 +1,7 @@
 [build-system]
 # Enable "setuptools-rust" to use effects written in Rust.
-requires = ["setuptools"]
-#requires = ["setuptools", "setuptools-rust"]
+#requires = ["setuptools"]
+requires = ["setuptools", "setuptools-rust"]
 build-backend = "setuptools.build_meta"
 
 [project]
@@ -9,8 +9,9 @@ name = "genevative"
 version = "0.3.0"
 dependencies = [
 	"ipython>=9.4.0",
-	"jupyterlab>=4.4.4",
+	"matplotlib>=3.10.3",
 	"numpy",
+	"pdoc>=15.0.4",
 	"scipy",
 	"sounddevice>=0.5.2",
 ]
@@ -18,6 +19,13 @@ dependencies = [
 [tool.setuptools.packages]
 # Pure Python packages/modules
 find = { where = ["python"] }
+
+[dependency-groups]
+dev = [
+    "mypy>=1.17.0",
+    "pyflakes>=3.4.0",
+    "pylint>=3.3.7",
+]
 
 #[[tool.setuptools-rust.ext-modules]]
 ## Private Rust extension module to be nested into the Python package
