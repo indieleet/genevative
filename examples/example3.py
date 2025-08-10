@@ -4,7 +4,6 @@ import genevative.FX as FX
 from os import system
 from scipy.signal import fftconvolve
 import matplotlib.pyplot as plt
-# |%%--%%| <kx03m4KW5W|gYFqzNKQ1Z>
 
 
 def i1(freq, dur, vel, hz, params):
@@ -62,7 +61,6 @@ def fx8(arr):
     return np.vstack((c1, c2), dtype=np.float64)
 
 silence = lambda f,d,v,h,p:np.zeros(int(d))
-# |%%--%%| <gYFqzNKQ1Z|ng31yDiil3>
 
 
 t = genevative.Tracker()
@@ -111,8 +109,7 @@ t.add_fx(1,fx6,fx6_arr)
 t.add_fx(2,fx6,fx6_arr)
 t.add_fx(0,fx4)
 t.add_fx(0,fx7)
-# |%%--%%| <ng31yDiil3|kSQMfPinep>
-t.add_fx(0,fx8)
+#t.add_fx(0,fx8)
 t.save()
 #t.save_daw()
 #plt.stairs(t.master[0][0][:64], fill=True)
@@ -120,5 +117,4 @@ t.save()
 #fig, ax = plt.subplot()
 #hist = ax.hist(t.master[0].flatten(),t.master.shape[-1]*2)
 #plt.show()
-# |%%--%%| <kSQMfPinep|M2bCzvZLBh>
 system("ffplay -loop 0 -i 3.wav 2> /dev/null")

@@ -2,6 +2,7 @@ import numpy as np
 from scipy.io.wavfile import write as wav_render
 from typing import Callable
 from .live import Live
+import genevative.FX
 
 class Tracker():
     """

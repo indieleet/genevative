@@ -61,13 +61,15 @@ fn biquad(dry: Vec<f64>, coef: (f64, f64, f64, f64, f64)) -> PyResult<Vec<f64>> 
     Ok(wet)
 }
 
+#[inline(always)]
 fn a_coef(break_freq: f32, hz: f32) -> f32 {
     use core::f32::consts::PI;
     let tan = (PI * break_freq / hz).tan();
     (tan - 1.) / (tan + 1.)
 }
 
-fn allpass_filter(input: Vec<f32>, break_freq: Vec<f32>, hz: f32) -> Vec<f32> {
+#[inline(always)]
+fn allpass_filter(input: &[f32], break_freq: &[f32], hz: f32) -> Vec<f32> {
     let mut dn_1 = 0.;
     let mut out = Vec::with_capacity(input.len());
     for i in 0..input.len() {
@@ -78,23 +80,26 @@ fn allpass_filter(input: Vec<f32>, break_freq: Vec<f32>, hz: f32) -> Vec<f32> {
     }
     out
 }
+
 #[pyfunction]
 #[pyo3(signature = (input, cutoff, hz, highpass=false, amplitude=1.0))]
 fn filter(input: Vec<f32>, cutoff: Vec<f32>, hz: f32, highpass: bool, amplitude: f32) -> PyResult<Vec<f32>> {
-    let allpass_out = allpass_filter(input, cutoff, hz);
+    let allpass_out = allpass_filter(&input, &cutoff, hz);
     let mult = if highpass { -1. } else { 1. };
-    let out = Vec::with_capacity(input.len());
+    let mut out = Vec::with_capacity(input.len());
     for i in 0..input.len() {
-        let res = input[i] + allpass_out * mult;
+        let res = input[i] + allpass_out[i] * mult;
         let res = res * 0.5 * amplitude;
         out.push(res);
     }
     Ok(out)
 }
+
 #[pymodule]
 fn _lib(m: &Bound<'_, PyModule>) -> PyResult<()> {
     m.add_function(wrap_pyfunction!(delay, m)?)?;
     m.add_function(wrap_pyfunction!(delay_m, m)?)?;
+    m.add_function(wrap_pyfunction!(filter, m)?)?;
     m.add_function(wrap_pyfunction!(biquad, m)?)?;
     Ok(())
 }
