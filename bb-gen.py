@@ -87,11 +87,19 @@ def bbgen(num):
         out.append(")")
         #else:
         #    out.append(raw_str)
-    return " ".join(out)
-def bbgen_c(num):
+    str_out = " ".join(out)
+    if info:
+        print(str_out, "\n")
+    return str_out
+
+def bb_to_f32(arr: np.array):
+    return np.interp(np.linspace(0, 1, int(44100 * len(arr) / 8000)), np.linspace(0, 1, len(arr)), arr.astype(uint8).astype(float32) / 128.0 - 1)
+
+def bbgen_c(num, info=False):
     success = True
     while success:
-        out = eval(bbgen(num)) % 256
+        out = eval(bbgen(num, info)) 
         if out.any():
             success = False
+            out = bb_to_f32(out)
     return out
